@@ -1,0 +1,58 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/git-safety.sh \"$TOOL_INPUT\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/spec-scope-enforcement.sh \"$TOOL_INPUT\""
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/protected-paths.sh \"$TOOL_INPUT\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/validation-format-check.sh \"$TOOL_INPUT\""
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/frontmatter-prose-check.sh \"$TOOL_INPUT\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/session-exit.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/self-review-gate.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
